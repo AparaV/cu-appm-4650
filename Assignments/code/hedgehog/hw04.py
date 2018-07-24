@@ -8,7 +8,7 @@ import numpy as np
 
 ## Differential Equations (ODE)
 
-def runge_kutta_4(system, u0, h, t0, tf, isVerbose=True):
+def runge_kutta_4(system, u0, h, t0, tf, isVerbose=True, retAll=False):
 	'''
 	Runge-Kutta Order 4
 	system and u0 are numpy arrays of same size
@@ -24,6 +24,8 @@ def runge_kutta_4(system, u0, h, t0, tf, isVerbose=True):
 	ti = t0                                     # initial time
 	ui = u0                                     # initial conditions
 	N = int((tf - ti) / h)                      # number of steps
+	U = [u0]
+	T = [t0]
 
 	for i in range(N):
 
@@ -44,6 +46,8 @@ def runge_kutta_4(system, u0, h, t0, tf, isVerbose=True):
 		# update step
 		ui = ui + (k1 + 2*k2 + 2*k3 + k4) / 6
 		ti += h
+		U.append(ui)
+		T.append(ti)
 
 	# print final value
 	if isVerbose:
@@ -53,7 +57,10 @@ def runge_kutta_4(system, u0, h, t0, tf, isVerbose=True):
 			output += "{:.7f} )".format(ui[n-1][0])
 			print(output)
 
-	return ui
+	if retAll:
+		return ui, U, T
+	else:
+		return ui
 
 def euler(f, y0, h, x0, xf, isVerbose=True):
 	''' Euler's method '''
